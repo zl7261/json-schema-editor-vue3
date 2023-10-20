@@ -28,3 +28,6 @@ init 为替换element-plus
 
 0.1.1
 children 才有 margin
+
+0.1.2
+区别disabledType和addChild

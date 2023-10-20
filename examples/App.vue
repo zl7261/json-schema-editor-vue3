@@ -10,7 +10,7 @@
     </div>
     <div class="container">
       <pre class="code">{{ jsonStr }}</pre>
-      <json-schema-editor class="schema" :value="tree"  lang="zh_CN" custom hide-root-name disabled-type />
+      <json-schema-editor class="schema" :value="tree"  lang="zh_CN" custom hide-root-name disabled-type :add-child="false" />
     </div>
   </div>
 </template>
@@ -34,7 +34,7 @@ export default {
     return {
       importJson: '',
       visible: false,
-      tree: {"root":{"properties":{"field_0_1":{"type":"string"},"field_0_2":{"type":"string"},"field_0_3":{"type":"string"}},"type":"object"}}
+      tree: {"root":{"type":"object"}}
     }
   },
   methods: {

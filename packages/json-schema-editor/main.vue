@@ -13,7 +13,6 @@
               </el-icon>
             </template>
           </el-button>
-          <span v-else style="width:32px;display:inline-block"></span>
           <el-input :disabled="disabled || root" class="json-col-name-input" @blur="onInputName"
                     v-model="pickKey"
                     :key="pickValue" />
@@ -52,7 +51,7 @@
         </el-tooltip>
         <el-tooltip v-if="isObject">
           <template #content>{{ local['add_child_node'] }}</template>
-          <el-button link class="plus-icon" @click="addChild" v-if="!disabledType">
+          <el-button link class="plus-icon" @click="addChild" v-if="showAddChild">
             <template #icon>
               <el-icon>
                 <Plus />
@@ -79,6 +78,7 @@
                           :value="{[key]:item}"
                           :parent="pickValue"
                           :key="index"
+                          :add-child="addChild"
                           :deep="deep+1"
                           :root="false"
                           class="children"
@@ -91,6 +91,7 @@
                           :deep="deep+1"
                           disabled
                           isItem
+                          :add-child="addChild"
                           :root="false"
                           class="children"
                           :lang="lang"
@@ -249,6 +250,11 @@ export default {
       type: Boolean,
       default: false
     },
+    // 是否可以add Child
+    addChild: {
+      type: Boolean,
+      default: true
+    },
     value: {
       type: Object,
       required: true
@@ -303,6 +309,13 @@ export default {
   }
   ,
   computed: {
+    showAddChild() {
+      if (this.isObject || this.isArray) {
+        return this.addChild
+      } else {
+        return false
+      }
+    },
     pickValue() {
       return Object.values(this.value)[0]
     },
