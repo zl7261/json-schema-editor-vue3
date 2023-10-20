@@ -1,7 +1,8 @@
 <template>
   <div class="json-schema-editor">
     <el-row class="row" :gutter="10">
-      <el-col :span="8" class="json-col-name">
+
+      <el-col :span="8" class="json-col-name" v-if="displayJsonName">
         <div :style="{marginLeft:`${20*deep}px`}" class="json-col-name-c">
           <el-button v-if="pickValue.type==='object'" link style="color:rgba(0,0,0,.65)"
                      @click="hidden = !hidden">
@@ -26,6 +27,7 @@
           <el-checkbox :disabled="isItem" :checked="checked" class="json-col-name-required" @change="onCheck" />
         </el-tooltip>
       </el-col>
+
       <el-col :span="4">
         <el-select v-model="pickValue.type" :disabled="disabledType" class="json-col-type" @change="onChangeType">
           <el-option :key="type" v-for="(type) in TYPE_NAME" :value="type">
@@ -39,7 +41,7 @@
       <el-col :span="6" class="json-col-setting">
         <el-tooltip>
           <template #content>{{ local['adv_setting'] }}</template>
-          <el-button link class="setting-icon" @click="onSetting">
+          <el-button v-show="pickValue.type" link class="setting-icon" @click="onSetting">
             <template #icon>
               <el-icon>
                 <Setting />
@@ -71,18 +73,32 @@
       </el-col>
     </el-row>
     <template v-if="!hidden&&pickValue.properties && !isArray">
-      <json-schema-editor v-for="(item,key,index) in pickValue.properties" :value="{[key]:item}" :parent="pickValue"
-                          :key="index" :deep="deep+1" :root="false" class="children" :lang="lang" :custom="custom" />
+      <json-schema-editor v-for="(item,key,index) in pickValue.properties"
+                          :hide-root-name="hideRootName"
+                          :value="{[key]:item}"
+                          :parent="pickValue"
+                          :key="index"
+                          :deep="deep+1"
+                          :root="false"
+                          class="children"
+                          :lang="lang"
+                          :custom="custom" />
     </template>
     <template v-if="isArray">
-      <json-schema-editor :value="{items:pickValue.items}" :deep="deep+1" disabled isItem :root="false"
+      <json-schema-editor :value="{items:pickValue.items}"
+                          :hide-root-name="hideRootName"
+                          :deep="deep+1"
+                          disabled
+                          isItem
+                          :root="false"
                           class="children"
-                          :lang="lang" :custom="custom" />
+                          :lang="lang"
+                          :custom="custom" />
     </template>
     <el-dialog v-model="modalVisible" v-if="modalVisible" :title="local['adv_setting']" :maskClosable="false"
                :okText="local['ok']" :cancelText="local['cancel']" width="800px" @ok="handleOk"
-               wrapClassName="json-schema-editor-advanced-modal">
-      <h3>{{ local['base_setting'] }}</h3>
+               modal-class="json-schema-editor-advanced-modal">
+      <div class="json-title">{{ local['base_setting'] }}</div>
       <el-form :model="advancedValue" class="json-advanced-search-form">
         <el-row :gutter="6">
           <el-col :span="8" v-for="(item,key) in advancedValue" :key="key">
@@ -114,56 +130,60 @@
           </el-col>
         </el-row>
       </el-form>
-      <h3 v-show="custom">{{ local['add_custom'] }}</h3>
-      <el-form class="json-advanced-search-form" v-show="custom">
-        <el-row :gutter="6">
-          <el-col :span="8" v-for="item in customProps" :key="item.key">
-            <el-form-item :label="item.key">
-              <el-input v-model="item.value" style="width:calc(100% - 30px)" />
-              <el-button link
-                         style="width:30px"
-                         @click="removeCustomNode(item.key)"
-              >
-                <template #icon>
-                  <el-icon>
-                    <Close />
-                  </el-icon>
-                </template>
-              </el-button>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8" v-show="addProp.key !== undefined">
-            <el-form-item>
-              <template #label>
-                <el-input v-model="addProp.key" style="width:100px" />
-              </template>
-              <el-input v-model="addProp.value" style="width:100%" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item>
-              <el-button link @click="confirmAddCustomNode(null)" v-if="customing">
-                <template #icon>
-                  <el-icon>
-                    <Check />
-                  </el-icon>
-                </template>
-              </el-button>
-              <el-tooltip :title="local['add_custom']" v-else>
-                <el-button link @click="addCustomNode">
+      <div>
+        <div class="json-title" v-show="custom">{{ local['add_custom'] }}</div>
+        <el-form class="json-advanced-search-form" v-show="custom">
+          <el-row :gutter="6" class="custom-property" :align="'middle'">
+            <el-col :span="8" v-for="item in customProps" :key="item.key">
+              <el-form-item :label="item.key" style="margin-bottom: 0;">
+                <el-input v-model="item.value" style="width:calc(100% - 30px)" />
+                <el-button link
+                           style="width:30px"
+                           @click="removeCustomNode(item.key)"
+                >
                   <template #icon>
                     <el-icon>
-                      <Plus />
+                      <Close />
                     </el-icon>
                   </template>
                 </el-button>
-              </el-tooltip>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <h3>{{ local['preview'] }}</h3>
-      <pre style="width:100%">{{ completeNodeValue }}</pre>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8" v-show="addProp.key !== undefined">
+              <el-form-item style="margin-bottom: 0;">
+                <template #label>
+                  <el-input v-model="addProp.key" style="width:100px" />
+                </template>
+                <el-input v-model="addProp.value" style="width:100%" />
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <div>
+                <el-button link @click="confirmAddCustomNode(null)" v-if="customing">
+                  <template #icon>
+                    <el-icon>
+                      <Check />
+                    </el-icon>
+                  </template>
+                </el-button>
+                <el-tooltip :content="local['add_custom']" v-else>
+                  <el-button link @click="addCustomNode">
+                    <template #icon>
+                      <el-icon>
+                        <Plus />
+                      </el-icon>
+                    </template>
+                  </el-button>
+                </el-tooltip>
+              </div>
+            </el-col>
+          </el-row>
+        </el-form>
+      </div>
+      <div class="json-preview">
+        <div class="json-title">{{ local['preview'] }}</div>
+        <pre class="json-preview-pre">{{ completeNodeValue }}</pre>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -212,55 +232,58 @@ export default {
     Plus
   },
   props: {
+    // 隐藏根节点的json-name，只显示 type title setting
+    hideRootName: {
+      type: Boolean,
+      default: false
+    },
     value: {
       type: Object,
-      required:
-          true
-    }
-    ,
-    disabled: { //name不可编辑，根节点name不可编辑,数组元素name不可编辑
+      required: true
+    },
+    //name不可编辑，根节点name不可编辑,数组元素name不可编辑
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    //禁用类型选择
+    disabledType: {
       type: Boolean,
       default:
           false
-    }
-    ,
-    disabledType: { //禁用类型选择
+    },
+    //是否数组元素
+    isItem: {
       type: Boolean,
       default:
           false
-    }
-    ,
-    isItem: { //是否数组元素
-      type: Boolean,
-      default:
-          false
-    }
-    ,
-    deep: { // 节点深度，根节点deep=0
+    },
+    // 节点深度，根节点deep=0
+    deep: {
       type: Number,
       default:
           0
-    }
-    ,
-    root: { //是否root节点
+    },
+    //是否root节点
+    root: {
       type: Boolean,
       default:
           true
-    }
-    ,
-    parent: { //父节点
+    },
+    //父节点
+    parent: {
       type: Object,
       default:
           null
-    }
-    ,
-    custom: { //enable custom properties
+    },
+    //enable custom properties
+    custom: {
       type: Boolean,
       default:
           false
-    }
-    ,
-    lang: { // i18n language
+    },
+    // i18n language
+    lang: {
       type: String,
       default:
           'zh_CN'
@@ -318,6 +341,12 @@ export default {
       return Object.assign({}, basicValue, t, this.advancedNotEmptyValue)
     }
     ,
+    displayJsonName() {
+      if (!this.root) {
+        return true
+      }
+      return !this.hideRootName;
+    }
   }
   ,
   data() {
@@ -561,7 +590,9 @@ export default {
 }
 
 .json-schema-editor .row .json-col-setting {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .json-schema-editor .row .setting-icon {
@@ -577,22 +608,38 @@ export default {
   color: #888;
   border: none;
 }
-</style>
-<style>
+
 .json-schema-editor-advanced-modal {
   color: rgba(0, 0, 0, 0.65);
   min-width: 600px;
 }
 
-.json-schema-editor-advanced-modal pre {
+.json-schema-editor .json-title, .json-schema-editor-advanced-modal .json-title {
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: initial;
+}
+
+.json-schema-editor-advanced-modal .custom-property {
+  margin-top: 16px;
+}
+
+.json-schema-editor-advanced-modal .json-preview {
+  font-family: monospace;
+  height: 100%;
+  overflow-y: auto;
+  border-radius: 4px;
+
+}
+
+.json-schema-editor-advanced-modal .json-preview-pre {
+  padding: 12px;
+  margin-top: 16px;
   font-family: monospace;
   height: 100%;
   overflow-y: auto;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  padding: 12px;
-  width: 50%;
 }
-
-
 </style>
