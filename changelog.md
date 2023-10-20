@@ -13,3 +13,6 @@ init 为替换element-plus
 
 0.0.8
 1. peerdeps vue3 element-plus element-icon
+
+0.0.9
+1. 为每个col都设置className

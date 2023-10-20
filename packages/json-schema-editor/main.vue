@@ -28,14 +28,15 @@
         </el-tooltip>
       </el-col>
 
-      <el-col :span="4">
-        <el-select v-model="pickValue.type" :disabled="disabledType" class="json-col-type" @change="onChangeType">
+      <el-col :span="4" class="json-col-type">
+        <el-select v-model="pickValue.type" :disabled="disabledType" class="json-type-select" @change="onChangeType">
           <el-option :key="type" v-for="(type) in TYPE_NAME" :value="type">
             {{ type }}
           </el-option>
         </el-select>
       </el-col>
-      <el-col :span="6">
+
+      <el-col :span="6" class="json-col-title">
         <el-input v-model="pickValue.title" class="json-col-title" :placeholder="local['title']" />
       </el-col>
       <el-col :span="6" class="json-col-setting">
@@ -567,7 +568,7 @@ export default {
   padding-left: 5px;
 }
 
-.json-schema-editor .row .json-col-type {
+.json-schema-editor .row .json-type-select {
   width: 100%;
 }
 
