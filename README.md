@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="http://json-schema.sviip.com/" target="_blank">json-schema-editor-vue</a>
+  <a href="http://json-schema.sviip.com/" target="_blank">json-schema-editor-vue33</a>
 </h1>
 
 [![Start](https://img.shields.io/github/stars/zyqwst/json-schema-editor-vue?style=social)](https://github.com/zyqwst/json-schema-editor-vue/stargazers)
@@ -30,15 +30,13 @@ A json-schema editor of high efficient and easy-to-use, base on Vue3
 ### Usage
 
 ```bash
-# vue2
-npm install json-schema-editor-vue
 # vue3 
-npm install json-schema-editor-vue3
+npm install json-schema-editor-vue3-element
 ```
 
 ```vue
-import JsonSchemaEditor from 'json-schema-editor-vue'
-import 'json-schema-editor-vue/lib/json-schema-editor-vue.css'
+import JsonSchemaEditor from 'json-schema-editor-vue-element'
+import 'json-schema-editor-vue-element/lib/json-schema-editor-vue-element.css'
 Vue.use(JsonSchemaEditor)
 ```
 

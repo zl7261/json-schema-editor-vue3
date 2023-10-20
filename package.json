@@ -1,5 +1,5 @@
 {
-  "name": "json-schema-editor-vue3",
+  "name": "json-schema-editor-vue3-element",
   "version": "1.2.0",
   "author": "zhangyq",
   "description": "A json-schema editor of high efficient and easy-to-use, base on Vue3",
@@ -12,20 +12,20 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zyqwst/json-schema-editor-vue3"
+    "url": "git+https://github.com/zl7261/json-schema-editor-vue3"
   },
   "homepage": "http://json-schema.sviip.com/",
   "license": " Apache-2.0 License",
-  "main": "lib/json-schema-editor-vue3.umd.min.js",
+  "main": "lib/json-schema-editor-vue3-element.umd.min.js",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "lib": "vue-cli-service build --target lib --name json-schema-editor-vue3 --dest lib packages/index.js"
+    "lib": "vue-cli-service build --target lib --name json-schema-editor-vue3-element --dest lib packages/index.js"
   },
   "dependencies": {
-    "@ant-design/icons-vue": "^6.1.0",
+    "@element-plus/icons-vue": "^2.1.0",
     "core-js": "^3.8.3",
     "vue": "^3.2.13"
   },
@@ -35,7 +35,7 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "ant-design-vue": "^3.2.10",
+    "element-plus": "^2.2.6",
     "babel-plugin-import": "^1.13.5",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",

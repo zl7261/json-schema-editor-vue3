@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import JsonSchemaEditor from '../packages/index'
-import { Modal} from 'ant-design-vue'
-createApp(App).use(JsonSchemaEditor).use(Modal).mount('#app')
+import { ElDialog} from 'element-plus'
+import 'element-plus/dist/index.css';
+createApp(App).use(JsonSchemaEditor).use(ElDialog).mount('#app')
