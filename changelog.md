@@ -7,3 +7,6 @@ init 为替换element-plus
 0.0.5
 1. 修正advanceModal不校验type的问题
 2. 添加hideRoot属性，允许用户不展示第一个root的name
+
+0.0.6
+1. 修正advanceModal的footer

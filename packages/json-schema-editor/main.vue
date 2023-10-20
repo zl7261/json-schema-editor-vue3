@@ -95,9 +95,19 @@
                           :lang="lang"
                           :custom="custom" />
     </template>
-    <el-dialog v-model="modalVisible" v-if="modalVisible" :title="local['adv_setting']" :maskClosable="false"
-               :okText="local['ok']" :cancelText="local['cancel']" width="800px" @ok="handleOk"
+    <el-dialog v-model="advanceModalVisible"
+               v-if="advanceModalVisible"
+               :title="local['adv_setting']"
+               :close-on-click-modal="false"
+               width="800px"
                modal-class="json-schema-editor-advanced-modal">
+      <template #footer>
+
+        <el-button @click="advanceModalVisible=false">{{ local['cancel'] }}</el-button>
+        <el-button type="primary" @click="submitAdvanceJson">
+          {{ local['ok'] }}
+        </el-button>
+      </template>
       <div class="json-title">{{ local['base_setting'] }}</div>
       <el-form :model="advancedValue" class="json-advanced-search-form">
         <el-row :gutter="6">
@@ -159,7 +169,7 @@
             </el-col>
             <el-col :span="8">
               <div>
-                <el-button link @click="confirmAddCustomNode(null)" v-if="customing">
+                <el-button link @click="confirmAddCustomNode(null)" v-if="addingCustom">
                   <template #icon>
                     <el-icon>
                       <Check />
@@ -293,44 +303,35 @@ export default {
   computed: {
     pickValue() {
       return Object.values(this.value)[0]
-    }
-    ,
+    },
     pickKey() {
       return Object.keys(this.value)[0]
-    }
-    ,
+    },
     isObject() {
       return this.pickValue.type === 'object'
-    }
-    ,
+    },
     isArray() {
       return this.pickValue.type === 'array'
-    }
-    ,
+    },
     checked() {
       return this.parent && this.parent.required && this.parent.required.indexOf(this.pickKey) >= 0
-    }
-    ,
+    },
     advanced() {
       return TYPE[this.pickValue.type]
-    }
-    ,
+    },
     advancedAttr() {
       return TYPE[this.pickValue.type].attr
-    }
-    ,
+    },
     ownProps() {
       return ['type', 'title', 'properties', 'items', 'required', ...Object.keys(this.advancedAttr)]
-    }
-    ,
+    },
     advancedNotEmptyValue() {
       const jsonNode = Object.assign({}, this.advancedValue);
       for (let key in jsonNode) {
         isNull(jsonNode[key]) && delete jsonNode[key]
       }
       return jsonNode
-    }
-    ,
+    },
     completeNodeValue() {
       const t = {}
       const basicValue = {...this.pickValue}
@@ -339,8 +340,7 @@ export default {
       }
       this._pickDiffKey().forEach(key => delete basicValue[key])
       return Object.assign({}, basicValue, t, this.advancedNotEmptyValue)
-    }
-    ,
+    },
     displayJsonName() {
       if (!this.root) {
         return true
@@ -354,11 +354,11 @@ export default {
       TYPE_NAME,
       hidden: false,
       countAdd: 1,
-      modalVisible: false,
+      advanceModalVisible: false,
       advancedValue: {},
       addProp: {},// 自定义属性
       customProps: [],
-      customing: false,
+      addingCustom: false,
       local: LocalProvider(this.lang)
     }
   }
@@ -368,8 +368,7 @@ export default {
       if (!ev) return ''
       if (!ev.length) return ''
       return ev.join('\n')
-    }
-    ,
+    },
     onInputName(e) {
       const oldKey = this.pickKey
       const newKey = e.target.value
@@ -394,8 +393,7 @@ export default {
         // eslint-disable-next-line vue/no-mutating-props
         this.parent['required'] = [...new Set(requireds)]
       }
-    }
-    ,
+    },
     onChangeType() {
       this.parseCustomProps()
       // 删除自定义属性
@@ -413,17 +411,14 @@ export default {
       if (this.isArray) {
         this.pickValue['items'] = {type: 'string'}
       }
-    }
-    ,
+    },
     onCheck(e) {
       console.log(e)
       this._checked(e.target?.checked, this.parent)
-    }
-    ,
+    },
     onRootCheck(e) {
       this._deepCheck(e.target?.checked, this.pickValue)
-    }
-    ,
+    },
     changeEnumValue(e) {
       const pickType = this.pickValue.type
       const value = e.target.value
@@ -438,8 +433,7 @@ export default {
           this.advancedValue.enum = arr.map(item => +item);
         }
       }
-    }
-    ,
+    },
     _deepCheck(checked, node) {
       if (node.type === 'object' && node.properties) {
         checked ? node['required'] = Object.keys(node.properties) : (delete node['required'])
@@ -448,8 +442,7 @@ export default {
         checked ? node.items['required'] = Object.keys(node.items.properties) : (delete node.items['required'])
         Object.keys(node.items.properties).forEach(key => this._deepCheck(checked, node.items.properties[key]))
       }
-    }
-    ,
+    },
     _checked(checked, parent) {
       let required = parent.required
       if (checked) {
@@ -463,8 +456,7 @@ export default {
         pos >= 0 && required.splice(pos, 1)
       }
       required.length === 0 && (delete parent['required'])
-    }
-    ,
+    },
     addChild() {
       const name = this._joinName()
       const type = 'string'
@@ -472,8 +464,7 @@ export default {
       node.properties || (node['properties'] = {}) // this.$set(node,'properties',{})
       const props = node.properties
       props[name] = {type: type} //this.$set(props,name,{type: type})
-    }
-    ,
+    },
     parseCustomProps() {
       const ownProps = this.ownProps
       Object.keys(this.pickValue).forEach(key => {
@@ -482,24 +473,21 @@ export default {
           // this.$delete(this.pickValue,key)
         }
       })
-    }
-    ,
+    },
     addCustomNode() {
       // this.$set(this.addProp,'key',this._joinName())
       // this.$set(this.addProp,'value','')
       this.addProp['key'] = this._joinName()
       this.addProp['value'] = ''
-      this.customing = true
-    }
-    ,
+      this.addingCustom = true
+    },
     removeCustomNode(key) {
       this.customProps.forEach((item, index) => {
         if (item.key === key) {
           this.customProps.splice(index, 1)
         }
       })
-    }
-    ,
+    },
     confirmAddCustomNode(prop) {
       const p = prop || this.addProp
       let existKey = false
@@ -511,9 +499,8 @@ export default {
       if (existKey) return
       this.customProps.push(p)
       this.addProp = {}
-      this.customing = false
-    }
-    ,
+      this.addingCustom = false
+    },
     removeNode() {
       const {properties, required} = this.parent
       delete properties[this.pickKey]
@@ -522,14 +509,12 @@ export default {
         pos >= 0 && required.splice(pos, 1)
         required.length === 0 && (delete this.parent['required'])
       }
-    }
-    ,
+    },
     _joinName() {
       return `field_${this.deep}_${this.countAdd++}`
-    }
-    ,
+    },
     onSetting() {
-      this.modalVisible = true
+      this.advanceModalVisible = true
       this.advancedValue = {...this.advanced.value}
       for (const k in this.advancedValue) {
         if (this.pickValue[k]) {
@@ -537,11 +522,9 @@ export default {
         }
       }
       this.parseCustomProps()
-    }
-    ,
-
-    handleOk() {
-      this.modalVisible = false
+    },
+    submitAdvanceJson() {
+      this.advanceModalVisible = false
       for (const key in this.advancedValue) {
         if (isNull(this.advancedValue[key])) {
           delete this.pickValue[key]
@@ -554,8 +537,7 @@ export default {
       for (const item of this.customProps) {
         this.pickValue[item.key] = item.value
       }
-    }
-    ,
+    },
     _pickDiffKey() {
       const keys = Object.keys(this.pickValue)
       return keys.filter(item => this.ownProps.indexOf(item) === -1)

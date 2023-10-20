@@ -34,7 +34,7 @@ export default {
     return {
       importJson: '',
       visible: false,
-      tree: {"root": {type: "string"}}
+      tree: {"root": {type: "object"}}
     }
   },
   methods: {
