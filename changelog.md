@@ -11,5 +11,5 @@ init 为替换element-plus
 0.0.6
 1. 修正advanceModal的footer
 
-0.0.7
+0.0.8
 1. peerdeps vue3 element-plus element-icon
