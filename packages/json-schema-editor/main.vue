@@ -1,6 +1,6 @@
 <template>
   <div class="json-schema-editor">
-    <div class="row" :gutter="10">
+    <div class="row">
 
       <div class="json-col-name" v-if="displayJsonName">
         <div :style="{marginLeft:`${20*deep}px`}" class="json-col-name-c">
@@ -548,9 +548,12 @@ export default {
 }
 </script>
 <style scoped>
+.json-schema-editor.children {
+  margin: 12px;
+}
+
 .row {
   display: flex;
-  margin: 12px;
   align-items: center;
   gap: 4px;
 }

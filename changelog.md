@@ -23,5 +23,8 @@ init 为替换element-plus
 0.0.11
 1. advanceModal appendToBody
 
-0.0.12
+0.1.0
 1. 移除el-row el-col 改用flex布局
+
+0.1.1
+children 才有 margin
