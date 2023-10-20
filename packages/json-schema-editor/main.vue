@@ -1,8 +1,8 @@
 <template>
   <div class="json-schema-editor">
-    <el-row class="row" :gutter="10">
+    <div class="row" :gutter="10">
 
-      <el-col :span="8" class="json-col-name" v-if="displayJsonName">
+      <div class="json-col-name" v-if="displayJsonName">
         <div :style="{marginLeft:`${20*deep}px`}" class="json-col-name-c">
           <el-button v-if="pickValue.type==='object'" link style="color:rgba(0,0,0,.65)"
                      @click="hidden = !hidden">
@@ -26,20 +26,20 @@
           <template #content>{{ local['required'] }}</template>
           <el-checkbox :disabled="isItem" :checked="checked" class="json-col-name-required" @change="onCheck" />
         </el-tooltip>
-      </el-col>
+      </div>
 
-      <el-col :span="4" class="json-col-type">
+      <div class="json-col-type">
         <el-select v-model="pickValue.type" :disabled="disabledType" class="json-type-select" @change="onChangeType">
           <el-option :key="type" v-for="(type) in TYPE_NAME" :value="type">
             {{ type }}
           </el-option>
         </el-select>
-      </el-col>
+      </div>
 
-      <el-col :span="6" class="json-col-title">
+      <div class="json-col-title">
         <el-input v-model="pickValue.title" class="json-col-title" :placeholder="local['title']" />
-      </el-col>
-      <el-col :span="6" class="json-col-setting">
+      </div>
+      <div class="json-col-setting">
         <el-tooltip>
           <template #content>{{ local['adv_setting'] }}</template>
           <el-button v-show="pickValue.type" link class="setting-icon" @click="onSetting">
@@ -71,8 +71,8 @@
             </template>
           </el-button>
         </el-tooltip>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
     <template v-if="!hidden&&pickValue.properties && !isArray">
       <json-schema-editor v-for="(item,key,index) in pickValue.properties"
                           :hide-root-name="hideRootName"
@@ -548,47 +548,44 @@ export default {
 }
 </script>
 <style scoped>
-.json-schema-editor .row {
+.row {
   display: flex;
   margin: 12px;
+  align-items: center;
+  gap: 4px;
 }
 
-.json-schema-editor .row .json-col-name {
+.json-col-name, .json-col-name-c {
   display: flex;
   align-items: center;
 }
 
-.json-schema-editor .row .json-col-name .json-col-name-c {
-  display: flex;
-  align-items: center;
-}
-
-.json-schema-editor .row .json-col-name .json-col-name-required {
+.json-col-name-required {
   flex: 0 0 24px;
   text-align: center;
   padding-left: 5px;
 }
 
-.json-schema-editor .row .json-type-select {
+.json-type-select {
   width: 100%;
 }
 
-.json-schema-editor .row .json-col-setting {
+.json-col-setting {
   display: flex;
   align-items: center;
   justify-content: flex-start;
 }
 
-.json-schema-editor .row .setting-icon {
+.setting-icon {
   color: rgba(0, 0, 0, 0.45);
   border: none;
 }
 
-.json-schema-editor .row .plus-icon {
+.plus-icon {
   border: none;
 }
 
-.json-schema-editor .row .close-icon {
+.close-icon {
   color: #888;
   border: none;
 }
@@ -598,18 +595,18 @@ export default {
   min-width: 600px;
 }
 
-.json-schema-editor .json-title, .json-schema-editor-advanced-modal .json-title {
+.json-title {
   display: block;
   font-size: 20px;
   font-weight: bold;
   font-family: initial;
 }
 
-.json-schema-editor-advanced-modal .custom-property {
+.custom-property {
   margin-top: 16px;
 }
 
-.json-schema-editor-advanced-modal .json-preview {
+.json-preview {
   font-family: monospace;
   height: 100%;
   overflow-y: auto;
@@ -617,7 +614,7 @@ export default {
 
 }
 
-.json-schema-editor-advanced-modal .json-preview-pre {
+.json-preview-pre {
   padding: 12px;
   margin-top: 16px;
   font-family: monospace;

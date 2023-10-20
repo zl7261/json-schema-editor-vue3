@@ -22,3 +22,6 @@ init 为替换element-plus
 
 0.0.11
 1. advanceModal appendToBody
+
+0.0.12
+1. 移除el-row el-col 改用flex布局

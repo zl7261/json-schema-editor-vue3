@@ -34,7 +34,7 @@ export default {
     return {
       importJson: '',
       visible: false,
-      tree: {"root": {type: "object"}}
+      tree: {"root":{"properties":{"field_0_1":{"type":"string"},"field_0_2":{"type":"string"},"field_0_3":{"type":"string"}},"type":"object"}}
     }
   },
   methods: {
@@ -87,16 +87,19 @@ export default {
   overflow: auto;
 }
 
+
+
 .schema {
   margin-left: 20px;
   width: 50%;
   height: 100%;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: auto;
   border: 1px solid rgba(0, 0, 0, .1);
   border-radius: 8px;
   padding: 12px;
 }
+
 
 .CodeMirror {
   height: 100% !important;
