@@ -1,8 +1,8 @@
 <template>
   <div class="json-schema-editor">
     <el-row class="row" :gutter="10">
-      <el-col :span="8" class="ant-col-name">
-        <div :style="{marginLeft:`${20*deep}px`}" class="ant-col-name-c">
+      <el-col :span="8" class="json-col-name">
+        <div :style="{marginLeft:`${20*deep}px`}" class="json-col-name-c">
           <el-button v-if="pickValue.type==='object'" link style="color:rgba(0,0,0,.65)"
                      @click="hidden = !hidden">
             <template #icon>
@@ -13,30 +13,30 @@
             </template>
           </el-button>
           <span v-else style="width:32px;display:inline-block"></span>
-          <el-input :disabled="disabled || root" class="ant-col-name-input" @blur="onInputName"
+          <el-input :disabled="disabled || root" class="json-col-name-input" @blur="onInputName"
                     v-model="pickKey"
                     :key="pickValue" />
         </div>
         <el-tooltip v-if="root">
           <template #content>{{ local['checked_all'] }}</template>
-          <el-checkbox :disabled="!isObject && !isArray" class="ant-col-name-required" @change="onRootCheck" />
+          <el-checkbox :disabled="!isObject && !isArray" class="json-col-name-required" @change="onRootCheck" />
         </el-tooltip>
         <el-tooltip v-else>
           <template #content>{{ local['required'] }}</template>
-          <el-checkbox :disabled="isItem" :checked="checked" class="ant-col-name-required" @change="onCheck" />
+          <el-checkbox :disabled="isItem" :checked="checked" class="json-col-name-required" @change="onCheck" />
         </el-tooltip>
       </el-col>
       <el-col :span="4">
-        <el-select v-model="pickValue.type" :disabled="disabledType" class="ant-col-type" @change="onChangeType">
+        <el-select v-model="pickValue.type" :disabled="disabledType" class="json-col-type" @change="onChangeType">
           <el-option :key="type" v-for="(type) in TYPE_NAME" :value="type">
             {{ type }}
           </el-option>
         </el-select>
       </el-col>
       <el-col :span="6">
-        <el-input v-model="pickValue.title" class="ant-col-title" :placeholder="local['title']" />
+        <el-input v-model="pickValue.title" class="json-col-title" :placeholder="local['title']" />
       </el-col>
-      <el-col :span="6" class="ant-col-setting">
+      <el-col :span="6" class="json-col-setting">
         <el-tooltip>
           <template #content>{{ local['adv_setting'] }}</template>
           <el-button link class="setting-icon" @click="onSetting">
@@ -60,7 +60,7 @@
         </el-tooltip>
         <el-tooltip v-if="!root && !isItem">
           <template #content>{{ local['remove_node'] }}</template>
-          <el-button link class="close-icon ant-btn-icon-only" @click="removeNode">
+          <el-button link class="close-icon json-btn-icon-only" @click="removeNode">
             <template #icon>
               <el-icon>
                 <Close />
@@ -83,7 +83,7 @@
                :okText="local['ok']" :cancelText="local['cancel']" width="800px" @ok="handleOk"
                wrapClassName="json-schema-editor-advanced-modal">
       <h3>{{ local['base_setting'] }}</h3>
-      <el-form :model="advancedValue" class="ant-advanced-search-form">
+      <el-form :model="advancedValue" class="json-advanced-search-form">
         <el-row :gutter="6">
           <el-col :span="8" v-for="(item,key) in advancedValue" :key="key">
             <el-form-item>
@@ -115,7 +115,7 @@
         </el-row>
       </el-form>
       <h3 v-show="custom">{{ local['add_custom'] }}</h3>
-      <el-form class="ant-advanced-search-form" v-show="custom">
+      <el-form class="json-advanced-search-form" v-show="custom">
         <el-row :gutter="6">
           <el-col :span="8" v-for="item in customProps" :key="item.key">
             <el-form-item :label="item.key">
@@ -540,27 +540,27 @@ export default {
   margin: 12px;
 }
 
-.json-schema-editor .row .ant-col-name {
+.json-schema-editor .row .json-col-name {
   display: flex;
   align-items: center;
 }
 
-.json-schema-editor .row .ant-col-name .ant-col-name-c {
+.json-schema-editor .row .json-col-name .json-col-name-c {
   display: flex;
   align-items: center;
 }
 
-.json-schema-editor .row .ant-col-name .ant-col-name-required {
+.json-schema-editor .row .json-col-name .json-col-name-required {
   flex: 0 0 24px;
   text-align: center;
   padding-left: 5px;
 }
 
-.json-schema-editor .row .ant-col-type {
+.json-schema-editor .row .json-col-type {
   width: 100%;
 }
 
-.json-schema-editor .row .ant-col-setting {
+.json-schema-editor .row .json-col-setting {
   display: inline-block;
 }
 
