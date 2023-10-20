@@ -19,3 +19,6 @@ init 为替换element-plus
 
 0.0.10
 1. disabledType禁用plus child按钮 
+
+0.0.11
+1. advanceModal appendToBody

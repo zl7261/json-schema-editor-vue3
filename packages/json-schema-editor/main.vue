@@ -101,6 +101,7 @@
                :title="local['adv_setting']"
                :close-on-click-modal="false"
                width="800px"
+               append-to-body
                modal-class="json-schema-editor-advanced-modal">
       <template #footer>
 
