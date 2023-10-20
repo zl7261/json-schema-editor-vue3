@@ -78,7 +78,7 @@
                           :value="{[key]:item}"
                           :parent="pickValue"
                           :key="index"
-                          :add-child="addChild"
+                          :can-add-child="canAddChild"
                           :deep="deep+1"
                           :root="false"
                           class="children"
@@ -91,7 +91,7 @@
                           :deep="deep+1"
                           disabled
                           isItem
-                          :add-child="addChild"
+                          :can-add-child="canAddChild"
                           :root="false"
                           class="children"
                           :lang="lang"
@@ -251,7 +251,7 @@ export default {
       default: false
     },
     // 是否可以add Child
-    addChild: {
+    canAddChild: {
       type: Boolean,
       default: true
     },
@@ -311,7 +311,7 @@ export default {
   computed: {
     showAddChild() {
       if (this.isObject || this.isArray) {
-        return this.addChild
+        return this.canAddChild
       } else {
         return false
       }
