@@ -23,7 +23,7 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "lib": "vue-cli-service build --target lib --name json-schema-editor-vue3-element --dest lib packages/index.js",
-    "publish-lib": "npm run lib && npm run publish"
+    "publish-lib": "npm run lib && npm publish"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
