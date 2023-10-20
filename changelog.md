@@ -16,3 +16,6 @@ init 为替换element-plus
 
 0.0.9
 1. 为每个col都设置className
+
+0.0.10
+1. disabledType禁用plus child按钮 

@@ -52,7 +52,7 @@
         </el-tooltip>
         <el-tooltip v-if="isObject">
           <template #content>{{ local['add_child_node'] }}</template>
-          <el-button link class="plus-icon" @click="addChild">
+          <el-button link class="plus-icon" @click="addChild" v-if="!disabledType">
             <template #icon>
               <el-icon>
                 <Plus />

@@ -10,7 +10,7 @@
     </div>
     <div class="container">
       <pre class="code">{{ jsonStr }}</pre>
-      <json-schema-editor class="schema" :value="tree"  lang="zh_CN" custom hide-root-name />
+      <json-schema-editor class="schema" :value="tree"  lang="zh_CN" custom hide-root-name disabled-type />
     </div>
   </div>
 </template>
